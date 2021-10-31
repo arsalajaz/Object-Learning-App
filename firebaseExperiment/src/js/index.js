@@ -10,6 +10,8 @@ function sendData(){
         username: textFieldData
       });
 
+      console.log("Data Sent");
+
     
 }
 /* ------- geting data --------- */

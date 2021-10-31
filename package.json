@@ -1,23 +1,30 @@
 {
-  "name": "CSC131_Project",
+  "name": "csc131project",
   "version": "1.0.0",
-  "description": "A web app to help children with disabilities learn different objects.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "Arsal Ajaz",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.0.12",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arsalajaz/CSC131_Project.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/arsalajaz/CSC131_Project/issues"
   },
   "homepage": "https://github.com/arsalajaz/CSC131_Project#readme",
-  "dependencies": {
-    "firebase": "^9.1.1"
-  }
+  "description": ""
 }
