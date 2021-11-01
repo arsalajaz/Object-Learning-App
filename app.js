@@ -7,10 +7,21 @@ const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const app = express();
 
-//database connection
+//database connection ------------------------------------------------------------- //database Schemas
+
 mongoose.connect("mongodb://localhost:27017/userData");
 
-const UserSchema = new mongoose.Schema({
+const ImageSchema = new mongoose.Schema({
+    name: String,
+    url: String
+})
+
+const SetSchema = new mongoose.Schema({
+    name: String,
+    images: [ImageSchema]
+})
+
+const UserSchema = new mongoose.Schema({ //
     username: {
         type: String,
         required: true
@@ -22,12 +33,18 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true
-    }
+    },
+    assignedSets: [SetSchema]
 });
+
 const User = mongoose.model('User', UserSchema);
+const Image = mongoose.model('Image', ImageSchema);
+
+//-------------------------------------------------------------------------------------------------------------------------//
 
 
-//Middleware
+//Middleware ----------------------------------------------------------------------------------------------------------------//
+
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(session({
@@ -37,7 +54,8 @@ app.use(session({
 }))
 app.use(express.urlencoded({extended: true}));
 
-//Passport.js
+//Passport.js --------------------------------------------------------------------------------------------------//
+
 app.use(passport.initialize())
 app.use(passport.session());
 
@@ -84,14 +102,20 @@ function isLoggedInAdmin(req, res, next) { //checks if admin is logged in
     res.redirect('/login?error=Permission Denied. Only an Admin can make this request')
 }
 
-//Routes
-app.get('/', isLoggedIn , function(req, res) {
-    console.log(req.user);
-    res.render('home', {
-        title: "Home",
-        role: req.user.role,
-        returnmsg: req.query.msg
-    })
+//Routes---------------------------------------------------------------------------------------------------------------------------//
+
+app.get('/', isLoggedIn , async function(req, res) {
+    
+    if(req.user.role == 'instructor') res.redirect('/dashboard');
+    else if(req.user.role == 'student') res.redirect('/portal');
+    else {
+        console.log(req.user);
+        res.render('home', {
+            title: "Home",
+            role: req.user.role,
+            returnmsg: req.query.msg
+        })
+    }
 });
 
 app.get('/login', isLoggedOut, function(req, res){
@@ -112,37 +136,41 @@ app.get("/logout", function (req, res) {
     res.redirect('/');
 })
 
-//setting up an admin user
-app.get('/setup', async (req, res) => {
-	const exists = await User.exists({ username: "admin" });
+//--admin sets a new user ------------------------////
+app.post('/setup', isLoggedInAdmin, async function(req, res) {
+	const exists = await User.exists({ username: req.body.username});
 
 	if (exists) {
-		res.redirect('/login');
+		res.redirect('/?msg=User Already Exists');
 		return;
 	}
 
 	bcrypt.genSalt(10, function (err, salt) {
 		if (err) return next(err);
-		bcrypt.hash("pass", salt, function (error, hash) {
+		bcrypt.hash(req.body.password, salt, function (error, hash) {
 			if (error) return next(error);
 			
-			const newAdmin = new User({
-				username: "admin",
+			const newUser = new User({
+				username: req.body.username,
 				password: hash,
-                role: "admin"
+                role: req.body.role
 			});
 
-			newAdmin.save();
+			newUser.save();
 
-			res.redirect('/login');
+			res.redirect('/?msg=Success');
 		});
 	});
 });
 
-app.post('/setup', isLoggedInAdmin ,function(req, res){
-    console.log(req.body);
-    res.redirect('/?msg=Success!');
+app.get("/dashboard", isLoggedIn, function(req, res){
+    res.render('homeInstructor',{}); 
 });
+
+app.get("/portal", isLoggedIn, function(req, res){
+    res.render('homeStudent', {});
+});
+
 
 app.listen('3000', function (err) { //starts the server
     console.log("Server started on port 3000");
