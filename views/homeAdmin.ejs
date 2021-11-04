@@ -1,31 +1,42 @@
-<%- include('layouts/header'); -%>
-
-<div class="box">
-    <h1>Welcome <%=role%>!</h1>
-    <a onclick="accountSetup()" class="setupBtn">Setup a new account</a>
-    <br>
-    <br>
-    <div id="setupForm" style="display: none">
-        <form action="/setup" method="post">
-        <input type="text" name="username" placeholder="Username">
-        <br>
-        <input type="text" name="password" placeholder="Password">
-        
-        <p>Role: </p>
-        <input type="radio" id="instructor" name="role" value="instructor"
-         checked>
-        <label for="instructor">Instructor</label>
-
-        <input type="radio" id="student" name="role" value="student">
-        <label for="student">Student</label>
-        
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="homeAdmin.css">
+    <title><%=title%></title>
+</head>
+<body>
+    <div class="box">
+        <h1>Welcome <%=role%>!</h1>
+        <a onclick="accountSetup()" class="setupBtn">Setup a new account</a>
         <br>
         <br>
-        <button type="submit" onclick="accountSetup()" class="saveBtn">Save</button>
-        </form>
+        <div id="setupForm" style="display: none">
+            <form action="/setup" method="post">
+            <input type="text" name="username" placeholder="Username">
+            <br>
+            <input type="text" name="password" placeholder="Password">
+            
+            <p>Role: </p>
+            <input type="radio" id="instructor" name="role" value="instructor"
+             checked>
+            <label for="instructor">Instructor</label>
+    
+            <input type="radio" id="student" name="role" value="student">
+            <label for="student">Student</label>
+            
+            <br>
+            <br>
+            <button type="submit" onclick="accountSetup()" class="saveBtn">Save</button>
+            </form>
+        </div>
+        <p class="feedback"><%=returnmsg%></p>
+        <a class="logoutButton" href="/logout">Logout</a>
     </div>
-    <p class="feedback"><%=returnmsg%></p>
-    <a class="logoutButton" href="/logout">Logout</a>
-</div>
+    <script src="index.js"></script>
+</body>
+</html>
 
-<%- include('layouts/footer'); -%>
+
