@@ -1,0 +1,41 @@
+<%- include('layouts/dashboardHeader'); -%>  
+    
+    <div class="set">
+        <h1 class="display-4">Create a New Set</h1>
+        <form action="/dashboard/create" method="post">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">Set Name</span>
+                </div>
+                <input type="text" name="setName" class="form-control" placeholder="Set 5" aria-label="Username" aria-describedby="basic-addon1" required>
+            </div>
+            <select  multiple="multiple" class="my-select" name="setImages">
+                <% for(let i=0; i<images.length; i++)  {%>
+                    <% if(i < 2) { %>
+                        <option class="options" value="<%=images[i].id%>" data-img-src="<%=images[i].url%>" selected><%=images[i].name%></option>
+                    <%} else {%>
+                        <option class="options" value="<%=images[i].id%>" data-img-src="<%=images[i].url%>"><%=images[i].name%></option>
+                    <%}%>
+                <%}%>
+            </select>
+            <br>
+            <br>
+            <%if(setMsg == 'success') {%>
+              <div class="alert alert-success fade-in alert-dismissible" role="alert">
+                <strong>Success!</strong> The set was successfully created and stored.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <%} else if(setMsg == 'failed') {%>
+              <div class="alert alert-danger fade-in alert-dismissible" role="alert">
+                <strong>Failed!</strong> Need to select at least one image.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <%}%>
+            <br>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+    </div>
+
+    
+    
+<%- include('layouts/dashboardFooter'); -%>

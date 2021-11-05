@@ -6,10 +6,17 @@
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    width: 20%;
+    width: 50%;
   }
  .set{
    background-color: rgb(209, 209, 209);
    text-align: center;
    padding: 30px;
+   min-height: 800px;
+ }
+
+ .alert{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
  }

@@ -8,8 +8,10 @@ function accountSetup() {
   }
 
 $(".my-select").chosen({
-    width: "50%"
+    width: "50%",
+    max_selected_options: 9
 });
+
 
 function myFunction() {
   var x = document.getElementById("myTopnav");

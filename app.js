@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const slashes = require('connect-slashes');
 const app = express();
 
 //database connection ------------------------------------------------------------- //database Schemas
@@ -63,6 +64,8 @@ app.use(session({
     saveUninitialized: true
 }))
 app.use(express.urlencoded({extended: true}));
+
+app.use(slashes(false))
 
 //Passport.js ------------------------------------------------------------------------------------------------------------//
 
@@ -131,7 +134,7 @@ app.get('/', isLoggedIn , async function(req, res) {
     if(req.user.role == 'instructor') res.redirect('/dashboard');
     else if(req.user.role == 'student') res.redirect('/portal');
     else {
-        res.render('homeAdmin', {
+        res.render('admin/homeAdmin', {
             title: "Home",
             role: req.user.role,
             returnmsg: req.query.msg
@@ -189,7 +192,7 @@ app.get("/dashboard", isLoggedIn, function(req, res){
     else {
         Image.find({}, function(err, arr) {
             if(err) console.log(err);
-            res.render('homeInstructor',{
+            res.render('instructorDashboard/homeInstructor',{
                 images: arr,
                 msg: req.query.msg,
                 setMsg: req.query.setMsg
@@ -201,29 +204,21 @@ app.get("/dashboard", isLoggedIn, function(req, res){
 app.get("/portal", isLoggedIn, function(req, res){
     if(req.user.role != 'student') res.redirect('/');
     else {
-        res.render('homeStudent', {});
+        res.render('studentPortal/homeStudent', {});
     }
 });
 
-app.post("/dashboard/add", isLoggedIn, function(req, res){
-    const newImage = new Image({
-        name: req.body.imageName,
-        url: req.body.imageUrl
-    });
 
-    newImage.save();
-    res.redirect('/dashboard?msg=Successfully Uploaded')
-})
 
 app.post("/dashboard/create", isLoggedIn, function(req, res){                                       //recieves post requests to create new sets
     
     if(req.body.setImages == null) {                                                                //if no image ids are sent then error
-        res.redirect('/dashboard?setMsg=Need to select at least one image to create a new set')
+        res.redirect('/dashboard?setMsg=failed')
     } else if(typeof req.body.setImages == 'string') {                                              //if only one image id is sent, create a set with only one image
         Image.findById(req.body.setImages, function(err, result){ 
             createNewSet(req.body.setName, [result]);
         })
-        res.redirect('/dashboard?setMsg=Successfully Created')
+        res.redirect('/dashboard?setMsg=success')
     } else {
         let newSet = new Set({
             name: req.body.setName,
@@ -240,16 +235,32 @@ app.post("/dashboard/create", isLoggedIn, function(req, res){                   
                 }
             });
         }
-        res.redirect('/dashboard?setMsg=Successfully Created')
+        res.redirect('/dashboard?setMsg=success')
     }
     
 });
 
-app.post('/test', function(req, res){
-    console.log(req.body)
+app.get('/dashboard/:tab', isLoggedIn, function(req, res){
+    if(req.params.tab == 'addimages') {
+        res.render('instructorDashboard/addimages', {
+            msg: req.query.msg
+        })
+    }
 })
 
-app.listen('3000', "10.0.0.197" ,function (err) { //starts the server
+app.post("/dashboard/:tab", isLoggedIn, function(req, res){
+    if(req.params.tab == 'addimages') {
+        const newImage = new Image({
+            name: req.body.imageName,
+            url: req.body.imageUrl
+        });
+
+        newImage.save();
+        res.redirect('/dashboard/addimages?msg=Successfully Uploaded')
+    }
+})
+
+app.listen('3000', function (err) { //starts the server
     console.log("Server started on port 3000");
 });
 

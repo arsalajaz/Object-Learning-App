@@ -1,0 +1,13 @@
+<%- include('layouts/dashboardHeader'); -%>  
+
+<h1>Add Image</h1>
+    
+<form action="/dashboard/addimages" method="post">
+    <input type="text" name="imageName" id="" placeholder="Name" required>
+    <input type="text" name="imageUrl" id="" placeholder="URL" required>
+    <button type="submit">Save</button>
+</form>
+    
+<p><%= msg %></p>
+
+<%- include('layouts/dashboardFooter'); -%>  
