@@ -245,7 +245,11 @@ app.post("/dashboard/create", isLoggedIn, function(req, res){                   
     
 });
 
-app.listen('3000', function (err) { //starts the server
+app.post('/test', function(req, res){
+    console.log(req.body)
+})
+
+app.listen('3000', "10.0.0.197" ,function (err) { //starts the server
     console.log("Server started on port 3000");
 });
 
