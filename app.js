@@ -64,6 +64,7 @@ app.use(session({
     saveUninitialized: true
 }))
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 app.use(slashes(false))
 
@@ -195,7 +196,8 @@ app.get("/dashboard", isLoggedIn, function(req, res){
             res.render('instructorDashboard/homeInstructor',{
                 images: arr,
                 msg: req.query.msg,
-                setMsg: req.query.setMsg
+                setMsg: req.query.setMsg,
+                user: req.user.username
             });
         });
     } 
@@ -211,7 +213,6 @@ app.get("/portal", isLoggedIn, function(req, res){
 
 
 app.post("/dashboard/create", isLoggedIn, function(req, res){                                       //recieves post requests to create new sets
-    
     if(req.body.setImages == null) {                                                                //if no image ids are sent then error
         res.redirect('/dashboard?setMsg=failed')
     } else if(typeof req.body.setImages == 'string') {                                              //if only one image id is sent, create a set with only one image
@@ -240,11 +241,29 @@ app.post("/dashboard/create", isLoggedIn, function(req, res){                   
     
 });
 
-app.get('/dashboard/:tab', isLoggedIn, function(req, res){
-    if(req.params.tab == 'addimages') {
+
+
+app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
+    if(req.user.role != 'instructor') res.redirect('/');
+    
+    else if(req.params.tab == 'addimages') {
         res.render('instructorDashboard/addimages', {
-            msg: req.query.msg
+            msg: req.query.msg,
+            user: req.user.username
         })
+    } else if(req.params.tab == 'edit') {
+        try {
+            const allSetsDB = await Set.find();
+            const allImagesDB = await Image.find();
+            res.render('instructorDashboard/editSets', {
+                user: req.user.username,
+                sets: allSetsDB,
+                images: allImagesDB
+            })
+        
+        } catch(e) {
+            console.log(e);
+        }
     }
 })
 
@@ -258,6 +277,12 @@ app.post("/dashboard/:tab", isLoggedIn, function(req, res){
         newImage.save();
         res.redirect('/dashboard/addimages?msg=Successfully Uploaded')
     }
+})
+
+
+app.post('/test', isLoggedIn ,function(req, res){
+    console.log(req.body)
+    res.send({name: "arsal"})
 })
 
 app.listen('3000', function (err) { //starts the server

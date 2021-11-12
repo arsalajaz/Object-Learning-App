@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200&family=Roboto:wght@100&family=Source+Sans+Pro:wght@200&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:wght@200&family=Roboto:wght@100&family=Source+Sans+Pro:wght@200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/image-selector/chosen.css">
     <link rel="stylesheet" href="/image-selector/ImageSelect.css">
     <link rel="stylesheet" href="/instructor.css">
@@ -22,12 +23,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="/dashboard" class="nav-item nav-link">Edit Sets</a>
+                <a href="/dashboard" class="nav-item nav-link">Create Sets</a>
+                <a href="/dashboard/edit" class="nav-item nav-link">Manage Sets</a>
                 <a href="/dashboard/addimages" class="nav-item nav-link" tabindex="-1">Add Images</a>
-                <a href="/dashboard/students" class="nav-item nav-link">Students</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a href="#" class="nav-item nav-link">arsalajaz</a>
+                <a href="#" class="nav-item nav-link"><%=user%></a>
                 <a href="/logout" class="btn btn-danger">Sign Out</a>
             </div>
         </div>

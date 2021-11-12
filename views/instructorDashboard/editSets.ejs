@@ -1,0 +1,73 @@
+<%- include('layouts/dashboardHeader'); -%>  
+
+<div class="card">
+    <h1 class="display-4">Sets</h1>
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        
+        <% for(let i=0; i<sets.length; i++) {%>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-heading<%- i %>">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse<%- i %>" aria-expanded="true" aria-controls="panelsStayOpen-collapse<%- i %>">
+              <%= sets[i].name %> 
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapse<%- i %>" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-heading<%- i %>" data-bs-parent="#accordionPanelsStayOpenExample">
+            <div class="accordion-body">
+                
+                <form action="">
+                    <select  multiple="multiple" class="my-select" name="setImages">
+                        <% for(let j=0; j<images.length; j++) { %>
+                            <% for(let k=0; k<sets[i].images.length; k++) { %>
+                                <%if(sets[i].images[k].id == images[j].id) {%>
+                                    <option class="options" value="<%=images[j].id%>" data-img-src="<%=images[j].url%>" selected><%=images[j].name%></option>
+                                    <% break %> 
+                                <% } else if(k >= sets[i].images.length-1 && sets[i].images[k].id != images[j].id) { %>
+                                    <option class="options" value="<%=images[j].id%>" data-img-src="<%=images[j].url%>"><%=images[j].name%></option>
+                                <%}%>
+                            <% } %>
+                        <% } %>
+                    </select>
+                </form>
+
+                <br>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#Modal<%= i %>"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg> Delete </button>
+                <br>
+                <br>
+                <!-- Modal -->
+                <div class="modal fade" id="Modal<%= i %>" tabindex="-1" aria-labelledby="Label<%= i %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="Label<%= i %>">Delete Set</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        Are you sure you want to delete Set: "<%= sets[i].name %> "
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-outline-danger"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                            </svg> Delete </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <%}%>
+
+    </div>
+</div>
+
+
+<%- include('layouts/dashboardFooter'); -%>  

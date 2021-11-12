@@ -8,8 +8,26 @@
 </head>
 <body>
     
+    <button onclick="fetchCommand()">Test</button>
     
     <a href="/logout">logout</a>
+
+    <script>
+        async function fetchCommand(){
+            const rawResponse = await fetch('/test', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({a: 1, b: 'Textual content'})
+            });
+            const content = await rawResponse.json();
+
+            let h3 = document.createElement('h3');
+            
+            h3.textContent = content.name;
+
+            document.getElementsByTagName('body')[0].append(h3)
+        }
+    </script>
 </body>
 </html>
 
