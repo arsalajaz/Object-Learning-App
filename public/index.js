@@ -9,7 +9,8 @@ function accountSetup() {
 
 $(".my-select").chosen({
     width: "50%",
-    max_selected_options: 12
+    max_selected_options: 12,
+    search_contains: true
 });
 
 

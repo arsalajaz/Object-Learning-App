@@ -285,6 +285,12 @@ app.post('/test', isLoggedIn ,function(req, res){
     res.send({name: "arsal"})
 })
 
+app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes set with the url
+    Set.deleteOne({_id: req.params.setId}, function(err, result){
+        if(err) {res.redirect('/dashboard/edit?deleted=false')}
+        else {res.redirect('/dashboard/edit?deleted=true')}
+    })
+})
 app.listen('3000', function (err) { //starts the server
     console.log("Server started on port 3000");
 });
