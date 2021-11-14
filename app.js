@@ -293,16 +293,24 @@ app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes s
 })
 
 app.get('/play/:setId', isLoggedIn, function(req, res) {
-    Set.findById(req.params.setId, function (err, foundSet) {
-        if(err) {console.log(err)}
-        else {
-            res.render('displaySet/display',{
-                setName: foundSet.name,
-                setImages: foundSet.images
-            })
-        }
-    });
-
+    if(req.params.setId.length != 24) {
+        res.status(404);
+        res.send('Set Not found');
+    } else {
+        Set.findById(req.params.setId, function (err, foundSet) {
+            if(err || foundSet == null) {
+                console.log(err)
+                res.status(404);
+                res.send('Set Not found');
+            }
+            else {
+                res.render('displaySet/display',{
+                    setName: foundSet.name,
+                    setImages: foundSet.images
+                })
+            }
+        });
+    }
     
 })
 
