@@ -291,6 +291,21 @@ app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes s
         else {res.redirect('/dashboard/edit?deleted=true')}
     })
 })
+
+app.get('/play/:setId', isLoggedIn, function(req, res) {
+    Set.findById(req.params.setId, function (err, foundSet) {
+        if(err) {console.log(err)}
+        else {
+            res.render('displaySet/display',{
+                setName: foundSet.name,
+                setImages: foundSet.images
+            })
+        }
+    });
+
+    
+})
+
 app.listen('3000', function (err) { //starts the server
     console.log("Server started on port 3000");
 });
