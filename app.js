@@ -10,7 +10,7 @@ const app = express();
 
 //database connection ------------------------------------------------------------- //database Schemas
 
-mongoose.connect("mongodb://localhost:27017/userData");
+mongoose.connect("mongodb+srv://learningAppServer:zGBlBhQDpZLLbgd4@cluster0.37fcs.mongodb.net/userData");
 
 const ImageSchema = new mongoose.Schema({
     name: {
