@@ -57,6 +57,9 @@ const Set = mongoose.model('Set', SetSchema)
 //Middleware -------------------------------------------------------------------------------------------------------------//
 
 app.set('view engine', 'ejs');
+app.set('view options', {
+    rmWhitespace: 'true'    
+})
 app.use(express.static(__dirname + '/public'));
 app.use(session({
     secret: "@)J}rut-?7C}KRge8",
@@ -213,6 +216,7 @@ app.get("/portal", isLoggedIn, function(req, res){
 
 
 app.post("/dashboard/create", isLoggedIn, function(req, res){                                       //recieves post requests to create new sets
+    
     if(req.body.setImages == null) {                                                                //if no image ids are sent then error
         res.redirect('/dashboard?setMsg=failed')
     } else if(typeof req.body.setImages == 'string') {                                              //if only one image id is sent, create a set with only one image
@@ -287,8 +291,10 @@ app.post('/test', isLoggedIn ,function(req, res){
 
 app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes set with the url
     Set.deleteOne({_id: req.params.setId}, function(err, result){
-        if(err) {res.redirect('/dashboard/edit?deleted=false')}
-        else {res.redirect('/dashboard/edit?deleted=true')}
+        if(err || result.deletedCount == 0) {res.redirect('/dashboard/edit?deleted=false')}
+        else {
+            console.log(result)
+            res.redirect('/dashboard/edit?deleted=true')}
     })
 })
 

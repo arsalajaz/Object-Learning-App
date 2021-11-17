@@ -23,17 +23,11 @@ function myFunction() {
   }
 }
 
-var acc = document.getElementsByClassName("accordion");
-var i;
-
-for (i = 0; i < acc.length; i++) {
-  acc[i].onclick = function() {
-    this.classList.toggle("active");
-    var panel = this.nextElementSibling;
-    if (panel.style.maxHeight){
-      panel.style.maxHeight = null;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-    } 
+var playBtns = document.getElementsByClassName('playBtn')
+if(playBtns.length != 0) {
+  for(let k=0; k<playBtns.length; k++) {
+    playBtns[k].addEventListener("click", function() {
+      window.open(playBtns[k].getAttribute('href'), '_blank');
+    });
   }
 }
