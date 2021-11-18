@@ -2,16 +2,58 @@
 <html lang="en">
 <head>
 <style>
+
 .firstSet {
     border: 5px outset red;
     background-color: lightblue;
     text-align: center;
 }
+
+/*Adding black background to navbar*/
+.navbar {
+    background-color: black;
+    overflow: hidden;
+}
+
+/*Styling the links inside the navbar*/
+.navbar a{
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/*Changing the color of link when hovering*/
+.navbar a:hover {
+    background-color: white;
+    color: black
+}
+
+/*Adding color to the active/current link */
+.navbar a.active{
+    background-color: green;
+    color: white;
+}
+
+
+
+
+
+
 </style>
     <title> Student Portal Page </title>
 </head>
 
 <body>
+
+
+<div class="navbar">
+    <a href="#signout">Sign Out</a>
+    <a href="#myportal">Parent</a>
+    <a class="active" href="#home">Home</a>
+</div>
 
 <!-- Main content -->
 <h1>Student Portal Page</h1>
