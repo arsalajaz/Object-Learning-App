@@ -17,7 +17,7 @@
 
 /*Styling the links inside the navbar*/
 .navbar a{
-    float: left;
+    float: right;
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -62,6 +62,14 @@
 
 <div class="firstSet">
     <p>Set 1</p>
+</div>
+
+<div class="secondSet">
+    <p>Set 2</p>
+</div>
+
+<div class="thirdSet">
+    <p>Set 3</p>
 </div>
 
 
