@@ -1,6 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<style>
+.firstSet {
+    border: 5px outset red;
+    background-color: lightblue;
+    text-align: center;
+}
+</style>
     <title> Student Portal Page </title>
 </head>
 
@@ -10,6 +17,15 @@
 <h1>Student Portal Page</h1>
 
 <p>First Section</p>
+
+<div class="firstSet">
+    <p>Set 1</p>
+</div>
+
+
+
+
+
 
 </body>
 </html>
