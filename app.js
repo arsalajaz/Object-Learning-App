@@ -6,6 +6,7 @@ const passport = require("passport");
 const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const slashes = require('connect-slashes');
+const { request } = require("express");
 const app = express();
 
 //database connection ------------------------------------------------------------- //database Schemas
@@ -206,10 +207,14 @@ app.get("/dashboard", isLoggedIn, function(req, res){
     } 
 });
 
-app.get("/portal", isLoggedIn, function(req, res){
+app.get("/portal", isLoggedIn, async function(req, res){
     if(req.user.role != 'student') res.redirect('/');
     else {
-        res.render('studentPortal/homeStudent', {});
+        const allSetsDB = await Set.find();
+        res.render('studentPortal/homeStudent', {
+            sets: allSetsDB, 
+            user: req.user.username
+        });
     }
 });
 
