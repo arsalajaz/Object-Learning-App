@@ -32,6 +32,13 @@ const SetSchema = new mongoose.Schema({
     images: [ImageSchema]
 })
 
+const SetIDSchema = new mongoose.Schema({
+    setID: {
+        type: String,
+        required: true
+    }
+})
+
 const UserSchema = new mongoose.Schema({ //
     username: {
         type: String,
@@ -45,8 +52,10 @@ const UserSchema = new mongoose.Schema({ //
         type: String,
         required: true
     },
-    assignedSets: [String]
+    assignedSets: [SetIDSchema]
 });
+
+
 
 const User = mongoose.model('User', UserSchema);
 const Image = mongoose.model('Image', ImageSchema);
@@ -210,9 +219,23 @@ app.get("/dashboard", isLoggedIn, function(req, res){
 app.get("/portal", isLoggedIn, async function(req, res){
     if(req.user.role != 'student') res.redirect('/');
     else {
-        const allSetsDB = await Set.find();
+        let assignedSetsIDs = req.user.assignedSets;
+        let assignedSets = [];
+        console.log("User ID: " + req.user.id)
+        for(let i=0; i<assignedSetsIDs.length; i++) {
+            console.log(assignedSetsIDs[i])
+            let foundSet = await Set.findById(assignedSetsIDs[i].setID);
+            if(foundSet != null) {
+                assignedSets.push(foundSet);
+            } else {
+                User.findByIdAndUpdate(req.user.id, { $pull: { assignedSets: { setID: assignedSetsIDs[i].setID} } } , function(err) {
+                    if(err) console.log(err)
+                } )
+            }
+        }
+        
         res.render('studentPortal/homeStudent', {
-            sets: allSetsDB, 
+            sets: assignedSets, 
             user: req.user.username
         });
     }
@@ -264,10 +287,13 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
         try {
             const allSetsDB = await Set.find();
             const allImagesDB = await Image.find();
+            const allStudentsDB = await User.find({role: "student"});
             res.render('instructorDashboard/editSets', {
                 user: req.user.username,
+                students: allStudentsDB,
                 sets: allSetsDB,
-                images: allImagesDB
+                images: allImagesDB,
+                assignMsg: req.query.assignMsg
             })
         
         } catch(e) {
@@ -276,7 +302,7 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
     }
 })
 
-app.post("/dashboard/:tab", isLoggedIn, function(req, res){
+app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
     if(req.params.tab == 'addimages') {
         const newImage = new Image({
             name: req.body.imageName,
@@ -285,6 +311,17 @@ app.post("/dashboard/:tab", isLoggedIn, function(req, res){
 
         newImage.save();
         res.redirect('/dashboard/addimages?msg=Successfully Uploaded')
+    } else if(req.params.tab == 'assign') { //add feature to check if the set is already assigned 
+        console.log(req.body);
+        console.log(req.body.selectedStudent)
+        User.findByIdAndUpdate(req.body.selectedStudent, { $push: { assignedSets: {setID: req.body.selectedSet} } }, 
+            function(err){
+                if(err) console.log(err)
+                else {
+                    res.redirect('/dashboard/edit?assignMsg=success')
+                }
+        })
+        
     }
 })
 
