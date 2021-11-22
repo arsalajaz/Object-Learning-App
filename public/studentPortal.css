@@ -1,0 +1,40 @@
+img {
+    max-height: 200px;
+    margin: 5px;
+}
+.playBtn {
+    margin-right: 10px;
+}
+
+.setsCard{
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    margin-top: 20px;
+    text-align: center;
+    background-color: rgb(246, 246, 246);
+}
+
+.accordion {
+    margin-left: auto;
+    margin-right: auto;
+    width: 97%;
+    margin-bottom: 10px;
+}
+
+.userName {
+    margin-right: 20px;
+    font-size: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.signoutBtn{
+    height: 40px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+nav{
+    background-color: rgb(233, 229, 229);
+}

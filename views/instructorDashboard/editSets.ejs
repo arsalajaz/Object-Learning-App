@@ -1,21 +1,43 @@
 <%- include('layouts/dashboardHeader'); -%>  
 
 <div class="card assignSetCard">
+
     <h1 class="display-4">Assign</h1>
-    <div>
-    <select class="selectSet assignBox">
-        <option selected>Student</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-    </select>
-    <select class="selectStudent assignBox">
-        <option selected>Set</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-    </select>
-    </div>
+
+    <form id="assignForm" action="/dashboard/assign" method="post">
+        
+        <select class="selectSet assignBox" id="selectedStudent" name="selectedStudent">
+            <option selected disabled>Student</option>
+            <% for(let i=0; i<students.length; i++) {%>
+            <option value="<%=students[i].id%>"><%=students[i].username%> </option>
+            <%}%> 
+        </select>
+
+        <select class="selectStudent assignBox" id="selectedSet" name="selectedSet" p>
+            <option selected disabled>Set</option>
+            <% for(let i=0; i<sets.length; i++) {%>
+                <option value="<%=sets[i].id%>"><%=sets[i].name %> </option>
+            <%}%> 
+        </select>
+    
+    <br>
+    <br>
+        
+        <div id="assignalert" class="alert alert-danger alert-dismissible" style="display: none;" role="alert">
+            Select a valid Student and Set!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <button type="button" onclick="postAssign()" class="btn btn-primary">Save</button>
+    </form>
+    <br>
+    <%if(assignMsg == 'success') {%>
+        
+        <div class="alert alert-success fade-in alert-dismissible" role="alert">
+          <strong>Success!</strong> The set was successfully assigned.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <%}%>
+
 </div>
 
 <div class="card editSetsCard">
@@ -101,6 +123,18 @@
     $(".assignBox").chosen({
         width: "50%"
     });
+    
+    function postAssign(){
+        let seletedSet = $('#selectedSet');
+        let selectedStudent = $('#selectedStudent');
+        console.log(seletedSet.val())
+        console.log(selectedStudent.val())
+        if(seletedSet.val() != null && selectedStudent.val() != null) {
+            $('#assignForm').submit();
+        } else {
+            $('#assignalert').css('display', 'block').fadeIn("slow");
+        }
+    }
 </script>
 
 </body>
