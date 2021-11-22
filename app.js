@@ -179,7 +179,7 @@ app.post('/setup', isLoggedInAdmin, async function(req, res) {
 	const exists = await User.exists({ username: req.body.username});
 
 	if (exists) {
-		res.redirect('/?msg=User Already Exists');
+		res.redirect('/?msg=User Already Exists. Choose a Different Username');
 		return;
 	}
 

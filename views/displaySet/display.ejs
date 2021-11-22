@@ -10,29 +10,32 @@
 </head>
 
 <body>
-    <div class="canvas">
+   
+  <div class="navbar">
+    <button class="btn btn-secondary" onclick="plusDivs(-1)">&#10094;</button>
+    <p id="counter"></p>
+    <button class="btn btn-secondary" onclick="plusDivs(+1)">&#10095;</button>
+    
+  </div>
     
 	<% for(let i=setImages.length; i>0; i--) {%> 
 		<div class="mySlides">
-		<ul>
-			<li>
+		<ul class="imageList">
+			
 			<% for(let j=i; j<setImages.length; j++) {%> 
+        <li class="imageItem">
 				<img src="<%=setImages[j].url%>" alt="<%=setImages[j].name%>" class="responsive">
-			<% } %>
+        </li>
+        <% } %>
 			<% for(let k=0; k<i; k++) {%> 
+        <li class="imageItem">
 				<img src="<%=setImages[k].url%>" alt="<%=setImages[k].name%>" class="responsive">
-			<% } %>  
-			</li>
+        </li>
+      <% } %>  
+			
 		</ul>
 		</div>
     <% } %> 
-
-    </div>
-
-    <button class="display-left" onclick="plusDivs(-1)">Previous</button>
-    <div class="display-right" >
-    <button  onclick="plusDivs(+1)">Next</button>
-    </div>
 
     <script>
 
@@ -52,7 +55,11 @@
           x[i].style.display = "none";
       }
         x[slideIndex-1].style.display = "block";
+        document.getElementById("counter").innerHTML = slideIndex + "/" + x.length;
+
       }
     </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

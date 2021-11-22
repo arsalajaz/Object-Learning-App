@@ -1,39 +1,44 @@
-body{
-    background-color: rgb(116, 116, 116);
-}
 img{
     /*max-width: 100%;
     max-height: 400px;*/
     padding: 10px;
 	padding-bottom: 10px;
-	height: 300px;
-	width: 300px;
+	
+	max-width: 270px;
+	max-height: 300px;
 }
-ul {
+.imageList {
 	list-style-type: none; 
 }
-li {
+.imageItem {
 	display: inline-block;
 	padding-bottom: 10px;
 	margin: 10px;
 }
-.canvas{
-    background-color: rgb(255, 255, 255);
-    height: 920px;
-    overflow-y:scroll;
+.btn{
+	width: 80px;
+	margin-left: 10px;
+	margin-right: 10px;
+	color: aliceblue;
 }
-.display-right{
-    display: inline;
-    position: relative;
-    left: 97%;
+#counter {
+	margin: 5px;
+	color: rgb(216, 216, 216);
+	font-size: 20px;
+	font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
-/*.responsive{
+
+.navbar {
+	background-color: #333;
+	overflow: hidden;
+	position: fixed;
+	bottom: 0;
 	width: 100%;
-	max-width: 300px;
-	height: 300px;
-}*/
-.responsive{
-	width: 100%;
-	max-width: 300px;
-	height: auto;
-}
+  }
+  
+  
+  
+  
+
+  
+  
