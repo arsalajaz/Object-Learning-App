@@ -128,7 +128,8 @@ function isLoggedInAdmin(req, res, next) { //checks if admin is logged in
     if(req.isAuthenticated() && req.user.role == 'admin') {
         return next();
     }
-    res.redirect('/login?error=Permission Denied. Only an Admin can make this request')
+    res.status(401)
+    res.send('Unauthorized Request')
 }
 
 //Other functions-------------------------------------------------------------------------------------------------------------------------//
@@ -244,8 +245,10 @@ app.get("/portal", isLoggedIn, async function(req, res){
 
 
 app.post("/dashboard/create", isLoggedIn, function(req, res){                                       //recieves post requests to create new sets
-    
-    if(req.body.setImages == null) {                                                                //if no image ids are sent then error
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+    } else if(req.body.setImages == null) {                                                                //if no image ids are sent then error
         res.redirect('/dashboard?setMsg=failed')
     } else if(typeof req.body.setImages == 'string') {                                              //if only one image id is sent, create a set with only one image
         Image.findById(req.body.setImages, function(err, result){ 
@@ -302,8 +305,11 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
     }
 })
 
-app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
-    if(req.params.tab == 'addimages') {
+app.post("/dashboard/:tab", isLoggedIn, function(req, res){
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+    } else if(req.params.tab == 'addimages') {
         const newImage = new Image({
             name: req.body.imageName,
             url: req.body.imageUrl
@@ -326,18 +332,18 @@ app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
 })
 
 
-app.post('/test', isLoggedIn ,function(req, res){
-    console.log(req.body)
-    res.send({name: "arsal"})
-})
-
 app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes set with the url
-    Set.deleteOne({_id: req.params.setId}, function(err, result){
-        if(err || result.deletedCount == 0) {res.redirect('/dashboard/edit?deleted=false')}
-        else {
-            console.log(result)
-            res.redirect('/dashboard/edit?deleted=true')}
-    })
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+    } else {
+        Set.deleteOne({_id: req.params.setId}, function(err, result){
+            if(err || result.deletedCount == 0) {res.redirect('/dashboard/edit?deleted=false')}
+            else {
+                console.log(result)
+                res.redirect('/dashboard/edit?deleted=true')}
+        })
+    }
 })
 
 app.get('/play/:setId', isLoggedIn, function(req, res) {

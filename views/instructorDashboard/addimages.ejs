@@ -4,10 +4,57 @@
     
 <form action="/dashboard/addimages" method="post">
     <input type="text" name="imageName" id="" placeholder="Name" required>
-    <input type="text" name="imageUrl" id="" placeholder="URL" required>
+    <input type="text" class="form-control" name="imageUrl" rows="3" placeholder="URL" required>
+    <input type="file" id="imagesUploaded" accept="image/*" multiple><br><br>
     <button type="submit">Save</button>
+    <button type="button" onclick="upload()">upload</button>
 </form>
-    
+
+<div class="progress">
+    <div id="progress-bar1" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
 <p><%= msg %></p>
 
-<%- include('layouts/dashboardFooter'); -%>  
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="/image-selector/chosen.jquery.js" type="text/javascript"></script>
+    <script src="/image-selector/ImageSelect.jquery.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="/index.js"></script>
+
+    <script>
+  
+    function upload() {
+        var file = document.getElementById('imagesUploaded');
+        var form = new FormData();
+        
+
+        var settings = {
+            "url": "https://api.imgbb.com/1/upload?expiration=600&key=4ad872797a1539be18b77c83ff91d2de",
+            "method": "POST",
+            "timeout": 0,
+            "processData": false,
+            "mimeType": "multipart/form-data",
+            "contentType": false,
+            "data": form
+        };
+
+        for(let i=0; i<file.files.length; i++) {
+
+            form.append("image", file.files[i]);
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                var jx = JSON.parse(response);
+                console.log(jx.data.url);
+                document.getElementById("progress-bar1").setAttribute("style", "width: " + Math.round(((i+1)/(file.files.length))*100) + "%");
+            });
+            
+            
+        }
+    }
+</script>
+
+</body>
+</html>
