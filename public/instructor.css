@@ -46,3 +46,19 @@
   margin: 10px;
 
 }
+
+.setImages{
+  max-width: 300px;
+  max-height: 300px;
+
+}
+
+.editBtn {
+  
+  margin-right: auto;
+  margin-left: auto;
+}
+.selectSetEdit{
+  margin-right: auto;
+  margin-left: auto;
+}

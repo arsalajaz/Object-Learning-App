@@ -149,9 +149,11 @@ app.get('/', isLoggedIn , async function(req, res) {
     if(req.user.role == 'instructor') res.redirect('/dashboard');
     else if(req.user.role == 'student') res.redirect('/portal');
     else {
+        let allUsersDB = await User.find({role: {$ne: 'admin'}});
         res.render('admin/homeAdmin', {
             title: "Home",
             role: req.user.role,
+            users: allUsersDB,
             returnmsg: req.query.msg
         })
     }
@@ -177,6 +179,10 @@ app.get("/logout", function (req, res) {
 
 //--admin sets a new user ------------------------////
 app.post('/setup', isLoggedInAdmin, async function(req, res) {
+    if(req.body.username == null || req.body.password == null || req.body.role == null) {
+        res.redirect('/?msg=Invalid Data');
+        return;
+    }
 	const exists = await User.exists({ username: req.body.username});
 
 	if (exists) {
@@ -244,18 +250,20 @@ app.get("/portal", isLoggedIn, async function(req, res){
 
 
 
-app.post("/dashboard/create", isLoggedIn, function(req, res){                                       //recieves post requests to create new sets
+app.post("/dashboard/create", isLoggedIn, async function(req, res){                                       //recieves post requests to create new sets
     if(req.user.role != 'instructor') {
         res.status(401);
         res.send("Unauthorized");
     } else if(req.body.setImages == null) {                                                                //if no image ids are sent then error
         res.redirect('/dashboard?setMsg=failed')
-    } else if(typeof req.body.setImages == 'string') {                                              //if only one image id is sent, create a set with only one image
+    } else if(typeof req.body.setImages == 'string') {  
+        console.log(req.body.setImages)                                            //if only one image id is sent, create a set with only one image
         Image.findById(req.body.setImages, function(err, result){ 
             createNewSet(req.body.setName, [result]);
         })
         res.redirect('/dashboard?setMsg=success')
     } else {
+        console.log(req.body.setImages)
         let newSet = new Set({
             name: req.body.setName,
             images: []
@@ -264,12 +272,13 @@ app.post("/dashboard/create", isLoggedIn, function(req, res){                   
         let imageIDs = req.body.setImages;
         
         for (let i=0; i<imageIDs.length; i++) {                                                      //loop through imageid array to find all the images and push to set
-            Image.findById(imageIDs[i], function(err, result){ 
-                newSet.images.push(result);
-                if(i == imageIDs.length - 1) {
-                    newSet.save();
-                }
-            });
+            let imageFound = await Image.findById(imageIDs[i])
+            if(imageFound != null) {
+                newSet.images.push(imageFound);
+            }
+            if(i == imageIDs.length - 1) {
+                newSet.save();
+            }
         }
         res.redirect('/dashboard?setMsg=success')
     }
@@ -305,7 +314,7 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
     }
 })
 
-app.post("/dashboard/:tab", isLoggedIn, function(req, res){
+app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
     if(req.user.role != 'instructor') {
         res.status(401);
         res.send("Unauthorized");
@@ -317,17 +326,27 @@ app.post("/dashboard/:tab", isLoggedIn, function(req, res){
 
         newImage.save();
         res.redirect('/dashboard/addimages?msg=Successfully Uploaded')
-    } else if(req.params.tab == 'assign') { //add feature to check if the set is already assigned 
+    } else if(req.params.tab == 'assign') { 
         console.log(req.body);
-        console.log(req.body.selectedStudent)
-        User.findByIdAndUpdate(req.body.selectedStudent, { $push: { assignedSets: {setID: req.body.selectedSet} } }, 
-            function(err){
-                if(err) console.log(err)
-                else {
-                    res.redirect('/dashboard/edit?assignMsg=success')
-                }
-        })
-        
+        let foundUser = await User.findById(req.body.selectedStudent)
+        console.log(foundUser.assignedSets);
+        let alreadyAssigned = false;
+        for(let i=0; i<foundUser.assignedSets.length; i++) { //check if the set is already assigned
+            if(foundUser.assignedSets[i].setID ==  req.body.selectedSet) {
+                alreadyAssigned = true;
+                res.redirect('/dashboard/edit?assignMsg=alreadyAssigned');
+                break;
+            } 
+        }
+        if(!alreadyAssigned) {
+            User.findByIdAndUpdate(req.body.selectedStudent, { $push: { assignedSets: {setID: req.body.selectedSet} } }, 
+                function(err){
+                    if(err) console.log(err)
+                    else {
+                        res.redirect('/dashboard/edit?assignMsg=success')
+                    }
+            })
+        }
     }
 })
 
@@ -366,6 +385,61 @@ app.get('/play/:setId', isLoggedIn, function(req, res) {
         });
     }
     
+})
+
+app.get('/set/:setID', isLoggedIn, function(req, res){
+    console.log(req.params.setID);
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+    }
+    Set.findById(req.params.setID, function(err, foundSet) {
+        if(err || foundSet == null) {
+            console.log(err)
+            res.status(404);
+            res.send('Set Not found');
+        }
+        else {
+            res.send(foundSet)
+        }
+    });
+    
+})
+
+app.get('/users/delete/:userID', isLoggedInAdmin, function (req, res) {
+    User.findByIdAndRemove(req.params.userID, function (err, docs) {
+        if(err) {res.redirect("/?deleteMsg=Failed")}
+        else {
+            res.redirect("/?deleteMsg=Success")
+            console.log(docs)
+        }
+    })
+})
+
+app.get('/createAdmin', async function(req, res){
+    const exists = await User.exists({ username: 'admin'});
+
+	if (exists) {
+		res.redirect('/');
+		return;
+	}
+
+	bcrypt.genSalt(10, function (err, salt) {
+		if (err) return next(err);
+		bcrypt.hash("pass", salt, function (error, hash) {
+			if (error) return next(error);
+			
+			const newUser = new User({
+				username: 'admin',
+				password: hash,
+                role: 'admin'
+			});
+
+			newUser.save();
+
+			res.redirect('/');
+		});
+	});
 })
 
 app.listen('3000', function (err) { //starts the server
