@@ -128,8 +128,7 @@ function isLoggedInAdmin(req, res, next) { //checks if admin is logged in
     if(req.isAuthenticated() && req.user.role == 'admin') {
         return next();
     }
-    res.status(401)
-    res.send('Unauthorized Request')
+    res.redirect('/');
 }
 
 //Other functions-------------------------------------------------------------------------------------------------------------------------//
@@ -305,7 +304,9 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
                 students: allStudentsDB,
                 sets: allSetsDB,
                 images: allImagesDB,
-                assignMsg: req.query.assignMsg
+                assignMsg: req.query.assignMsg,
+                editMsg: req.query.editMsg,
+                editedSet: req.query.editedSet
             })
         
         } catch(e) {
@@ -314,43 +315,81 @@ app.get('/dashboard/:tab', isLoggedIn, async function(req, res){
     }
 })
 
-app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
+app.post("/dashboard/addimages", isLoggedIn, async function(req, res){
     if(req.user.role != 'instructor') {
         res.status(401);
         res.send("Unauthorized");
-    } else if(req.params.tab == 'addimages') {
-        const newImage = new Image({
-            name: req.body.imageName,
-            url: req.body.imageUrl
-        });
+        return;
+    }
 
-        newImage.save();
-        res.redirect('/dashboard/addimages?msg=Successfully Uploaded')
-    } else if(req.params.tab == 'assign') { 
-        console.log(req.body);
-        let foundUser = await User.findById(req.body.selectedStudent)
-        console.log(foundUser.assignedSets);
-        let alreadyAssigned = false;
-        for(let i=0; i<foundUser.assignedSets.length; i++) { //check if the set is already assigned
-            if(foundUser.assignedSets[i].setID ==  req.body.selectedSet) {
-                alreadyAssigned = true;
-                res.redirect('/dashboard/edit?assignMsg=alreadyAssigned');
-                break;
-            } 
-        }
-        if(!alreadyAssigned) {
-            User.findByIdAndUpdate(req.body.selectedStudent, { $push: { assignedSets: {setID: req.body.selectedSet} } }, 
-                function(err){
-                    if(err) console.log(err)
-                    else {
-                        res.redirect('/dashboard/edit?assignMsg=success')
-                    }
-            })
-        }
-    } else if(req.params.tab == 'edit') {
-        
+    const newImage = new Image({
+        name: req.body.imageName,
+        url: req.body.imageUrl
+    });
+
+    newImage.save();
+    res.redirect('/dashboard/addimages?msg=Successfully Uploaded');
+
+});
+
+app.post("/dashboard/assign", isLoggedIn, async function(req, res){
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+        return;
+    }
+
+    console.log(req.body);
+    let foundUser = await User.findById(req.body.selectedStudent)
+    if(foundUser == null) {
+        res.redirect('/dashboard/edit?assignMsg=UserNotFound');
+        return;
+    }
+    console.log(foundUser.assignedSets);
+    let alreadyAssigned = false;
+    for(let i=0; i<foundUser.assignedSets.length; i++) { //check if the set is already assigned
+        if(foundUser.assignedSets[i].setID ==  req.body.selectedSet) {
+            alreadyAssigned = true;
+            res.redirect('/dashboard/edit?assignMsg=alreadyAssigned');
+            break;
+        } 
+    }
+    if(!alreadyAssigned) {
+        User.findByIdAndUpdate(req.body.selectedStudent, { $push: { assignedSets: {setID: req.body.selectedSet} } }, 
+            function(err){
+                if(err) console.log(err)
+                else {
+                    res.redirect('/dashboard/edit?assignMsg=success')
+                }
+        })
     }
 })
+
+app.post("/dashboard/edit", isLoggedIn, async function(req, res){
+    if(req.user.role != 'instructor') {
+        res.status(401);
+        res.send("Unauthorized");
+        return;
+    }
+
+    if(req.body == {} || req.body.selectedSetEdit == null || req.body.selectedImages == null ) {
+        res.status(400);
+        res.send("Bad Request");
+        return;
+    }
+    
+    const images = await Image.find({ '_id': { $in: req.body.selectedImages} });
+    console.log(images)
+    Set.findByIdAndUpdate(req.body.selectedSetEdit, { images: images }, function (err, docs) {
+            if (err){
+                res.redirect('/dashboard/edit?editMsg=fail&editedSet=' + req.body.selectedSetEdit)
+            }
+            else{
+                res.redirect('/dashboard/edit?editMsg=success&editedSet=' + req.body.selectedSetEdit)
+                console.log("Updated User : ", docs);
+            }
+    });
+});
 
 
 app.get('/dashboard/delete/:setId', isLoggedIn, function(req, res){  //deletes set with the url

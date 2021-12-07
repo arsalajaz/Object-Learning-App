@@ -36,34 +36,61 @@
           <strong>Success!</strong> The set was successfully assigned.
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    <%}%>
+    <%} else if(assignMsg == 'alreadyAssigned') {%>
+        <div class="alert alert-warning fade-in alert-dismissible" role="alert">
+            <strong>Failed!</strong> The user is already assigned this set.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    <% } %> 
 
 </div>
 
-
+<!-- Edit Set -Start-->
 
 <div class="card">
     <h1 class="display-4">Edit Sets</h1>
     <div class="selectSet">
-        <select class="assignBox" id="selectedSetEdit" name="selectedSetEdit" onchange="getSetData()">
-            <option selected disabled>Set</option>
-            <% for(let i=0; i<sets.length; i++) {%>
-                <option value="<%=sets[i].id%>"><%=sets[i].name %> </option>
-            <%}%> 
-        </select>
+
+        <form id="editForm" action="/dashboard/edit" method="post">
+            <select class="assignBox" id="selectedSetEdit" name="selectedSetEdit" onchange="getSetData()">
+                <option selected disabled>Set</option>
+                <% for(let i=0; i<sets.length; i++) {%>
+                    <option value="<%=sets[i].id%>"><%=sets[i].name %> </option>
+                <%}%> 
+            </select>
+
+            <br>
+            <br>
+        
+            <select  multiple="multiple" name="selectedImages" class="my-select" id="images-select">
+                <% for(let j=0; j<images.length; j++) { %> 
+                    <option class="options" value="<%=images[j].id%>" data-img-src="<%=images[j].url%>"><%=images[j].name%></option>
+                <%}%>  
+            </select>
+            <br>
+            <br>
+            
+        </form>
+        <button type="button" class="editBtn btn btn-primary" onclick="editPost()">Save Changes</button>
         <br>
         <br>
-        <select  multiple="multiple" class="my-select" id="images-select">
-            <% for(let j=0; j<images.length; j++) { %> 
-                <option class="options" value="<%=images[j].id%>" data-img-src="<%=images[j].url%>"><%=images[j].name%></option>
-            <%}%>  
-        </select>
+        <%if(editMsg == 'success') {%>
+            <div class="alert alert-success fade-in alert-dismissible" role="alert">
+              <strong>Success!</strong> The set was successfully stored edited.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <%} else if(editMsg == 'fail') {%>
+            <div class="alert alert-warning fade-in alert-dismissible" role="alert">
+                <strong>Failed!</strong> Something went wrong.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+        <% } %> 
     </div>
-    <br>
-    <button type="button" class="editBtn btn btn-primary" onclick="">Save Changes</button>
+    
+    
 </div>
 
-
+<!-- Edit Set -End-->
 
 <div class="card editSetsCard">
     <h1 class="display-4">Sets</h1>
@@ -131,6 +158,8 @@
 
     </div>
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="/image-selector/chosen.jquery.js" type="text/javascript"></script>
@@ -207,6 +236,19 @@
                 });
         }
     
+    }
+
+    function editPost(){
+        let selectedSet = $('#selectedSetEdit');
+        let selectedImages = $('#images-select');
+        console.log(selectedSet.val())
+        console.log(selectedImages.val())
+
+        if(!(selectedImages.val().length == 0 || selectedImages.val() == null)) {
+            $('#editForm').submit();
+        }
+        
+        
     }
     
 
