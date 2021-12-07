@@ -4,20 +4,63 @@ img{
     padding: 10px;
 	padding-bottom: 10px;
 	
-	width: 270px;
+	
 }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+	img{
+		max-width: 70vw;
+		max-height: 70vw;
+	}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+	img{
+		width: 40vw;
+		max-height: 40vw;
+	}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+	img{
+		width: 40vw;
+		max-height: 40vw;
+	}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+	img{
+		width: 40vw;
+		max-height: 40vh;
+	}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+	img{
+		width: 15vw;
+	}
+}
+
+
 .imageList {
 	list-style-type: none; 
 }
 .imageItem {
 	display: inline-block;
-	padding-bottom: 10px;
-	margin: 10px;
+	padding-bottom: 5px;
+	margin: 5px;
 }
 .btn{
-	width: 80px;
+	width: 50px;
+	margin-top: 5px;
 	margin-left: 10px;
 	margin-right: 10px;
+	margin-bottom: 5px;
 	color: aliceblue;
 }
 #counter {
@@ -28,12 +71,16 @@ img{
 }
 
 .navbar {
+	
+	border-radius: 5px;
 	background-color: #333;
 	overflow: hidden;
 	position: fixed;
-	bottom: 0;
-	width: 100%;
-  }
+	left: 10px;
+	bottom: 10px;
+	width: 40%;
+}
+
   
   
   

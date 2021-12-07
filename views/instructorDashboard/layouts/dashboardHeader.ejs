@@ -23,9 +23,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav">
-                <a href="/dashboard" class="nav-item nav-link">Create Sets</a>
-                <a href="/dashboard/edit" class="nav-item nav-link">Manage Sets</a>
-                <a href="/dashboard/addimages" class="nav-item nav-link" tabindex="-1">Add Images</a>
+                <a href="/dashboard" id="nav-dash" class="nav-item nav-link">Create Sets</a>
+                <a href="/dashboard/edit" id="nav-edit" class="nav-item nav-link">Manage Sets</a>
+                <a href="/dashboard/addimages" id="nav-images" class="nav-item nav-link" tabindex="-1">Add Images</a>
             </div>
             <div class="navbar-nav ms-auto">
                 <a href="#" class="nav-item nav-link"><%=user%></a>
@@ -34,3 +34,13 @@
         </div>
     </div>
 </nav>
+<script>
+    console.log(window.location.pathname);
+    if(window.location.pathname == '/dashboard') {
+        document.querySelector("#nav-dash").classList.add("active");
+    } else if(window.location.pathname == '/dashboard/edit') {
+        document.querySelector("#nav-edit").classList.add("active");
+    } else if(window.location.pathname == '/dashboard/addimages') {
+        document.querySelector("#nav-images").classList.add("active");
+    }
+</script>

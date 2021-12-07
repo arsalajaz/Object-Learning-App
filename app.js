@@ -347,6 +347,8 @@ app.post("/dashboard/:tab", isLoggedIn, async function(req, res){
                     }
             })
         }
+    } else if(req.params.tab == 'edit') {
+        
     }
 })
 
@@ -449,3 +451,22 @@ app.listen('3000', function (err) { //starts the server
 
 
 
+/*
+function regulateScreenSize() {
+    if(fullscreen) {
+        Exit full screen
+        Change icon to full screen
+    } else {
+        Do full screen
+        Chnage icon to lower full screen
+    }
+}
+
+function hideNavbar(){
+    if(navbar is hidden) [
+        unhide
+    ] else {
+        hide
+    }
+}
+*/

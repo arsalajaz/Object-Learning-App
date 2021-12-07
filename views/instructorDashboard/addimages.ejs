@@ -30,7 +30,7 @@
         
 
         var settings = {
-            "url": "https://api.imgbb.com/1/upload?expiration=600&key=4ad872797a1539be18b77c83ff91d2de",
+            "url": "https://api.imgbb.com/1/upload?key=4ad872797a1539be18b77c83ff91d2de",
             "method": "POST",
             "timeout": 0,
             "processData": false,
@@ -49,9 +49,8 @@
                 console.log(jx.data.url);
                 document.getElementById("progress-bar1").setAttribute("style", "width: " + Math.round(((i+1)/(file.files.length))*100) + "%");
             });
-            
-            
         }
+        document.getElementById("progress-bar1").setAttribute("style", "width: 100%");
     }
 </script>
 
