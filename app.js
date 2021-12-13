@@ -482,8 +482,11 @@ app.get('/createAdmin', async function(req, res){
 		});
 	});
 })
-
-app.listen('3000', function (err) { //starts the server
+let port = process.env.PORT;
+if(port == null || port == "") {
+    port = 3000;
+}
+app.listen(port, function (err) { //starts the server
     console.log("Server started on port 3000");
 });
 
