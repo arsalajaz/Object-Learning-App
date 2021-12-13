@@ -2,17 +2,18 @@
 <div class="card">
 <h1>Add Image</h1>
     
-<form action="/dashboard/addimages" method="post">
-    <input type="text" name="imageName" id="" placeholder="Name" required>
-    <input type="text" class="form-control" name="imageUrl" rows="3" placeholder="URL" required>
-    <input type="file" id="imagesUploaded" accept="image/*" multiple><br><br>
-    <button type="submit">Save</button>
-    <button type="button" onclick="upload()">upload</button>
+<form id="imageForm" action="/dashboard/addimages" method="post">
+    <input type="text" class="form-control" id="imageName" name="imageName" rows="3" placeholder="Image Name" required>
+    <br>
+    <input type="text" class="form-control" id="imageUrl" name="imageUrl" rows="3" placeholder="URL" required>
+    <p class="imageMsg"></p>
+    <br>
+    <button class="btn btn-primary" type="button" onclick="checkImage(document.querySelector('#imageUrl').value)">Save</button>
+    
 </form>
+<p><%= msg %></p>
 </div>
 
-
-<p><%= msg %></p>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
@@ -21,14 +22,33 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
     <script>
-  
+    function checkImage(url) {
+        var image = new Image();
+        image.onload = function() {
+            if (this.width > 0) {
+                console.log("image exists");
+                let imageName = document.querySelector("#imageName").value;
+                let imageUrl = document.querySelector("#imageUrl").value;
+                if((imageName != "" || imageName != null) && (imageUrl != "" || imageUrl != null)) {
+                    $("#imageForm").submit();
+                }
+            }
+        }
+        image.onerror = function() {
+            console.log("image doesn't exist");
+            document.querySelector(".imageMsg").innerHTML = "Invalid Image Url";
+        }
+        image.src = url;
+    }
+    //Upload directly to image hosting site
+    /*
     function upload() {
         var file = document.getElementById('imagesUploaded');
         var form = new FormData();
         
 
         var settings = {
-            "url": "https://api.imgbb.com/1/upload?key=4ad872797a1539be18b77c83ff91d2de",
+            "url": "https://api.imgbb.com/1/upload?key=APIKEY",
             "method": "POST",
             "timeout": 0,
             "processData": false,
@@ -49,7 +69,7 @@
             });
         }
         document.getElementById("progress-bar1").setAttribute("style", "width: 100%");
-    }
+    }*/
 </script>
 
 </body>
