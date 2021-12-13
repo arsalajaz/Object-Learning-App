@@ -29,6 +29,9 @@
   "engines": {
     "node": "14.18.0"
   },
+  "scripts": {
+    "start": "node app.js"
+  },
   "homepage": "https://github.com/arsalajaz/CSC131_Project#readme",
   "description": ""
 }
