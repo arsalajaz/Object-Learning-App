@@ -11,7 +11,7 @@
 
 <body>
   
-  <div class="navbar">
+  <div class="navbar" id="controlNav">
     
     <button class="btn btn-secondary" onclick="plusDivs(-1)">&#10094;</button>
     <p id="counter"></p>
@@ -19,26 +19,32 @@
     <button class="btn btn-secondary" onclick="FullScreen()" id="togglefullscreenbutton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>
     </svg></button>
-    <button class="btn btn-secondary" id="hideNav">X</button>
+    <button class="btn btn-secondary" id="toggleResize" onclick="resizeabletoggle()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+      <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+    </svg></button>
+    <button class="btn btn-secondary" onclick="toggleNav()" id="hideNav"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrows-collapse" viewBox="0 0 16 16" style="transform: rotate(90deg);">
+      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"/>
+    </svg></button>
   </div>
   
+  <button class="btn btn-secondary bringBackNavBtn" onclick="toggleNav()" hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrows-expand" viewBox="0 0 16 16" style="transform: rotate(90deg);">
+    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"/>
+  </svg ></button>
     
 	<% for(let i=setImages.length; i>0; i--) {%> 
 		<div class="mySlides">
-		<ul class="imageList">
-			
+	
 			<% for(let j=i; j<setImages.length; j++) {%> 
-        <li class="imageItem">
-				<img class="resize-drag" src="<%=setImages[j].url%>" alt="<%=setImages[j].name%>" class="responsive">
-        </li>
+    
+				<img class="imageItem img-fluid" src="<%=setImages[j].url%>" alt="<%=setImages[j].name%>" class="responsive">
+     
         <% } %>
 			<% for(let k=0; k<i; k++) {%> 
-        <li class="imageItem">
-				<img class="resize-drag" src="<%=setImages[k].url%>" alt="<%=setImages[k].name%>" class="responsive">
-        </li>
+     
+				<img class="imageItem img-fluid" src="<%=setImages[k].url%>" alt="<%=setImages[k].name%>" class="responsive">
+     
       <% } %>  
 			
-		</ul>
 		</div>
     <% } %> 
 
@@ -95,7 +101,10 @@
   import interact from 'https://cdn.interactjs.io/v1.9.20/interactjs/index.js'
  
   // target elements with the "draggable" class
-  interact('.resize-drag').resizable({
+  
+      interact('.resize-drag').resizable({
+
+     
       // resize from all edges and corners
       edges: { left: true, right: true, bottom: true, top: true },
 
@@ -126,39 +135,46 @@
       // minimum size
       interact.modifiers.restrictSize({
           min: { width: 100, height: 50 }
+       
       })
       ],
 
       inertia: true
-  })
-  .draggable({
-      listeners: { move: dragMoveListener },
-      inertia: true,
-      modifiers: [
-      interact.modifiers.restrictRect({
-          endOnly: true
       })
-      ]
-  })
-          
-
-  function dragMoveListener (event) {
-      var target = event.target
-      // keep the dragged position in the data-x/data-y attributes
-      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-      // translate the element
-      target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-
-      // update the posiion attributes
-      target.setAttribute('data-x', x)
-      target.setAttribute('data-y', y)
-  }
-
-  // this function is used later in the resizing and gesture demos
-  window.dragMoveListener = dragMoveListener
+     
+  
 </script>
+
+<script>
+  function resizeabletoggle() {
+    
+    var imageTags = document.querySelectorAll(".imageItem");
+      if(!(imageTags[0].classList.contains('resize-drag'))) {
+        document.querySelector("#toggleResize").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16"><path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/></svg>'
+      } else {
+        document.querySelector("#toggleResize").innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>'
+      }
+     
+     console.log(imageTags)
+      for (let i = 0; i < imageTags.length; i++) {
+        imageTags[i].classList.toggle("resize-drag");
+        imageTags[i].classList.toggle("resizeBorder");
+      }
+  }
+  function toggleNav() {
+    let navbar = document.querySelector("#controlNav");
+    let bringBackNavBtn = document.querySelector(".bringBackNavBtn");
+    if(navbar.getAttribute("hidden") == null) {
+      navbar.setAttribute("hidden", true);
+      bringBackNavBtn.removeAttribute("hidden");
+    } else {
+      navbar.removeAttribute("hidden");
+      bringBackNavBtn.setAttribute("hidden", true);
+    }
+  }
+</script>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

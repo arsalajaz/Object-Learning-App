@@ -1,66 +1,22 @@
-img{
-    /*max-width: 100%;
-    max-height: 400px;*/
-    padding: 10px;
-	padding-bottom: 10px;
-	
-	
+
+.resize-drag {
+	touch-action: none;
+
+	/* This makes things *much* easier */
+	box-sizing: border-box;
 }
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-	img{
-		max-width: 70vw;
-		max-height: 70vw;
-	}
-}
-
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-	img{
-		width: 40vw;
-		max-height: 40vw;
-	}
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-	img{
-		width: 40vw;
-		max-height: 40vw;
-	}
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-	img{
-		width: 40vw;
-		max-height: 40vh;
-	}
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-	img{
-		width: 15vw;
-	}
-}
-
-
-.imageList {
-	list-style-type: none; 
+.mySlides {
+	padding: 20px;
 }
 .imageItem {
-	display: inline-block;
-	padding-bottom: 5px;
-	margin: 5px;
+	margin: 10px;
+	height: 250px;
+	
 }
-.btn{
+.btn-secondary{
 	width: 50px;
-	margin-top: 5px;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-bottom: 5px;
+	margin: 5px;
 	color: aliceblue;
 }
 #counter {
@@ -71,16 +27,28 @@ img{
 }
 
 .navbar {
-	
+	padding: 5px;
 	border-radius: 5px;
 	background-color: #333;
 	overflow: hidden;
 	position: fixed;
 	left: 10px;
 	bottom: 10px;
-	width: 40%;
+	width: 50%;
+	z-index: 1;
+	
+}
+.bringBackNavBtn{
+	position: fixed;
+	left: -5px;
+	bottom: 10px;
+	padding: 10px;
+	z-index: 1;
 }
 
+.resizeBorder{
+	border: rgb(0, 0, 0) solid 3px;
+}
   
   
   

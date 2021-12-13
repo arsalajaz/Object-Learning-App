@@ -26,6 +26,9 @@
   "bugs": {
     "url": "https://github.com/arsalajaz/CSC131_Project/issues"
   },
+  "engines": {
+    "node": "14.18.0"
+  },
   "homepage": "https://github.com/arsalajaz/CSC131_Project#readme",
   "description": ""
 }

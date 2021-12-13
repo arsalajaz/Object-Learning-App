@@ -54,7 +54,19 @@
             <button type="submit" class="btn btn-primary">Save</button>
            
             </form>
-            <p class="feedback"><%=returnmsg%></p>
+            <br>
+            <% if(returnmsg == 'User Already Exists. Choose a Different Username') {%> 
+            <div class="alert alert-danger fade-in alert-dismissible" role="alert">
+                <strong>Failed!</strong> User Already Exists. Choose a Different Username
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+            <% if(returnmsg == 'Success') {%> 
+                <div class="alert alert-success fade-in alert-dismissible" role="alert">
+                    <strong>Success!</strong> User Account Successfully Created.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } %> 
         </div>
         
     

@@ -1,5 +1,5 @@
 <%- include('layouts/dashboardHeader'); -%>  
-
+<div class="card">
 <h1>Add Image</h1>
     
 <form action="/dashboard/addimages" method="post">
@@ -9,10 +9,8 @@
     <button type="submit">Save</button>
     <button type="button" onclick="upload()">upload</button>
 </form>
-
-<div class="progress">
-    <div id="progress-bar1" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
+
 
 <p><%= msg %></p>
 
