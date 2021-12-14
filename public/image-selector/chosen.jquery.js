@@ -996,7 +996,10 @@
     };
 
     Chosen.prototype.update_results_content = function(content) {
-      return this.search_results.html(content);
+      this.search_results.html(content);
+    	return this.form_field_jq.trigger("chosen:filter", { //9-29-17 added in to replace images after search.
+        	chosen: this
+      	});
     };
 
     Chosen.prototype.results_hide = function() {
