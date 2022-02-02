@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const session = require("express-session");
 const exphbs = require("express-handlebars");
@@ -11,7 +12,7 @@ const app = express();
 
 //database connection ------------------------------------------------------------- //database Schemas
 
-mongoose.connect("mongodb+srv://learningAppServer:zGBlBhQDpZLLbgd4@cluster0.37fcs.mongodb.net/userData");
+mongoose.connect(process.env.DB_KEY);
 
 const ImageSchema = new mongoose.Schema({
     name: {
@@ -72,7 +73,7 @@ app.set('view options', {
 })
 app.use(express.static(__dirname + '/public'));
 app.use(session({
-    secret: "@)J}rut-?7C}KRge8",
+    secret: process.env.SESSION_KEY,
     resave: "false",
     saveUninitialized: true
 }))
@@ -467,7 +468,7 @@ app.get('/createAdmin', async function(req, res){
 
 	bcrypt.genSalt(10, function (err, salt) {
 		if (err) return next(err);
-		bcrypt.hash("pass", salt, function (error, hash) {
+		bcrypt.hash(process.env.ADMIN_PASS, salt, function (error, hash) {
 			if (error) return next(error);
 			
 			const newUser = new User({
