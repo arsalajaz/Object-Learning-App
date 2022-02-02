@@ -1,3 +1,3 @@
-# CSC131_Project
+# Object-Learning-App
 
-An app to help children with disabilities learn objects
+An app to help children with disabilities learn common objects
